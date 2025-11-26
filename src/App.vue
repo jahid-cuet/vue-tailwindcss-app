@@ -3,13 +3,17 @@ import { ref } from 'vue'
 import Navbar from './components/Navbar.vue'
 import Sidebar from './components/Sidebar.vue'
 import TodoApp from './components/TodoApp.vue'
+import ShowPost from './components/Showpost.vue'
+
+const selectedPostId = ref(null)
 
 const activeContent = ref('')       // current main content
 
 const sidebarOpen = ref(false)      // small screen sidebar toggle
 
-function setContent(menu) {
+function setContent(menu,id) {
   activeContent.value = menu
+  selectedPostId.value = id
   sidebarOpen.value = false   // small screen e click korle sidebar auto hide
 }
 </script>
@@ -32,7 +36,7 @@ function setContent(menu) {
 
       <!-- Main Content -->
       <div 
-        :class="['flex-1 bg-gray-100 p-6 overflow-auto min-h-screen transition-all duration-300', sidebarOpen ? 'ml-64' : 'ml-0', 'md:ml-64']"
+        :class="['flex-1 bg-green-300 p-6 overflow-auto min-h-screen transition-all duration-300', sidebarOpen ? 'ml-64' : 'ml-0', 'md:ml-64']"
       >
 
         <!-- Default message -->
@@ -44,8 +48,9 @@ function setContent(menu) {
         </div>
 
         <!-- Todo content -->
+
         <div v-else-if="activeContent === 'Todo'" class="flex justify-center items-center h-full">
-          <TodoApp />
+          <TodoApp  @showPost="setContent" />
         </div>
 
         <!-- Profile content -->
@@ -60,6 +65,11 @@ function setContent(menu) {
           <div class="text-center">
             <h2 class="text-3xl font-bold mb-4">This is Contact Page</h2>
           </div>
+        </div>
+
+
+        <div v-else-if="activeContent === 'ShowPost'" class="flex justify-center items-center h-full">
+          <ShowPost :id="selectedPostId" /> 
         </div>
 
       </div>
