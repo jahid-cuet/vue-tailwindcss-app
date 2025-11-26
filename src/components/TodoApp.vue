@@ -1,6 +1,42 @@
 <script setup>
 import { ref, onMounted } from "vue";
 
+
+// create start
+
+const showCreateForm = ref(false);
+const newPost = ref({
+  title: "",
+  body: ""
+});
+
+
+
+function toggleCreateForm() {
+  showCreateForm.value = !showCreateForm.value;
+}
+
+function createPost() {
+  if (!newPost.value.title || !newPost.value.body) return;
+
+  const newId = posts.value.length
+    ? posts.value[posts.value.length - 1].id + 1
+    : 1;
+
+  posts.value.unshift({
+    id: newId,
+    title: newPost.value.title,
+    body: newPost.value.body
+  });
+
+  // Reset form and hide again
+  newPost.value = { title: "", body: "" };
+  showCreateForm.value = false;
+}
+
+
+//Create End
+
 const emit = defineEmits(["showPost"]); // send event + id to parent
 
 const posts = ref([]);
@@ -85,6 +121,53 @@ onMounted(() => {
 <template>
   <div class="mx-auto mt-5 p-6 bg-white rounded-lg shadow-md w-full">
     <h1 class="text-2xl font-bold mb-4">Posts List</h1>
+
+
+<!-- Create Post start -->
+
+ <!-- Add Post Button -->
+<button
+  @click="toggleCreateForm"
+  class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mb-4"
+>
+  {{ showCreateForm ? "Close" : "Add Post" }}
+</button>
+
+<!-- Create Post Form (toggle) -->
+<div v-if="showCreateForm" class="mb-6 p-4 bg-blue-50 rounded shadow">
+  <h2 class="text-xl font-bold mb-3">Create New Post</h2>
+
+  <input
+    v-model="newPost.title"
+    type="text"
+    placeholder="Post title"
+    class="w-full border px-3 py-2 rounded mb-2"
+  />
+
+  <textarea
+    v-model="newPost.body"
+    placeholder="Post body"
+    rows="3"
+    class="w-full border px-3 py-2 rounded mb-3"
+  />
+
+  <button
+    @click="createPost"
+    class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+  >
+    Save Post
+  </button>
+</div>
+
+<!-- Create Post End -->
+
+
+
+
+
+
+
+
 
     <div v-if="loading" class="text-blue-600">Loading...</div>
     <div v-if="error" class="text-red-600">Error: {{ error }}</div>

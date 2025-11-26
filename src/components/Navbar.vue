@@ -23,7 +23,7 @@ function toggleDropdown(){
 
       <!-- DropDown -->
       <li class ="relative">
-        <button @click="toggleDropdown" class="hover:text-blue-400 transition duration-200">
+        <button @click="toggleDropdown" class="hover:text-blue-400 transition duration-200 cursor-pointer">
           DropDown
         </button>
         <ul v-if="isOpen" class="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg">
